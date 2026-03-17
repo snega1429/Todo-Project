@@ -19,6 +19,7 @@ export default function Login({ onLoginSuccess} : LoginProps) {
     try {
 
       const res = await API.post("/login", {email,password});
+      console.log("Server response:", {email, password });
 
       console.log(res.data);
 
@@ -31,18 +32,19 @@ export default function Login({ onLoginSuccess} : LoginProps) {
       }
 
     } catch (error: any) {
-      if (error.response)
+      if (error.response && error.response.data) {
         setMessage(error.response.data.detail || "Login failed");
-      else 
-        setMessage("Login Successful");
+      } else { 
+        setMessage("Login successful");
     }
+  }
   };
       
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
 
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleLogin}> className="login-form"
 
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <br />
@@ -54,7 +56,7 @@ export default function Login({ onLoginSuccess} : LoginProps) {
 
       </form>
 
-      {message && <p>{message}</p>}
+      {message && <p className="login-message">{message}</p>}
 
     </div>
   );

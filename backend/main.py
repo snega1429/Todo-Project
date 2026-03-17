@@ -52,20 +52,23 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
 @app.post("/login")
 def login(user: schemas.UserCreate, db: Session = Depends(get_db)):
-  
 
-    db_user = db.query(models.User).filter(models.User.email == user.email).first()
+    email = user.email.strip()
+    password = user.password
+
+    db_user = db.query(models.User).filter(models.User.email == email).first()
 
     if not db_user:
+    
         raise HTTPException(status_code=400, detail="User not found")
 
-    if db_user.password != user.password:
+    if db_user.password != password:
+        
         raise HTTPException(status_code=400, detail="Invalid password")
 
     return {
         "message": "Login successful"
     }
-
 @app.post("/todos")
 def create_todo(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
 

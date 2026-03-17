@@ -4,12 +4,11 @@ import Login from "./components/Login";
 import CreateTodo from "./components/CreateTodo";
 import TodoList from "./components/TodoList";
 
-import './App.css';
 
 function App() {
   const [step, setStep] = useState("login");
 
-  const handleLoginSuccess = () => {
+    const handleLoginSuccess = () => {
     console.log("Step changed to Signup");
     setStep("signup");
   };
