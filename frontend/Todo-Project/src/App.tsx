@@ -3,26 +3,31 @@ import Signup from "./components/Signup";
 import Login from "./components/Login";
 import CreateTodo from "./components/CreateTodo";
 import TodoList from "./components/TodoList";
+import "./index.css";
 
 
 function App() {
   const [step, setStep] = useState("login");
+  const [refresh, setRefresh] = useState(false);
 
     const handleLoginSuccess = () => {
-    console.log("Step changed to Signup");
     setStep("signup");
   };
 
-  const handleSignupSuccess = () => {
-    setStep("todo");
-  };
+    const handleSignupSuccess = () => {
+    setStep("todo"); 
+};
+
+  
 
   const handleCreateTodoSuccess = () => {
-    setStep("todo");
+    setRefresh(prev => !prev);
   };
 
+
   return (
-    <div>
+    <div className="container">
+      <div className="card"></div>
       <h1>Todo App</h1>
 
       {step === "login" && (
@@ -36,7 +41,7 @@ function App() {
       {step === "todo" && (
       <>
         <CreateTodo onCreateTodoSuccess={handleCreateTodoSuccess} />
-        <TodoList />
+        <TodoList refresh={refresh} />
       </>
 
       )}

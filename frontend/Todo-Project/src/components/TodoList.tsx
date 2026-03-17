@@ -1,4 +1,3 @@
-// src/components/TodoList.tsx
 import { useEffect, useState } from "react";
 import API from "../api/api";
 
@@ -9,37 +8,58 @@ type Todo = {
   due_date: string;
 };
 
-export default function TodoList() {
+export default function TodoList({ refresh }: { refresh: boolean }) {
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [refresh]);
 
   const fetchTodos = async () => {
     try {
       const res = await API.get("/todos");
+      console.log("Fetched Todos:", res.data); // 🔥 debug
       setTodos(res.data);
     } catch (error) {
-      console.error("Error fetching todos:", error);
-      setTodos([]);
-    } finally {
-      setLoading(false);
+      console.log("Fetch failed");
     }
   };
 
-  if (loading) return <p>Loading Todos...</p>;
-  if (!todos.length) return <p>No Todos Found</p>;
+  const formatDate = (date: string) => {
+    if (!date) return "No date";
+    return new Date(date).toLocaleDateString("en-IN");
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await API.delete(`/todos/${id}`);
+      console.log("Deleted:", id);
+      fetchTodos(); // 🔥 refresh after delete
+    } catch (error) {
+      console.log("Delete failed");
+    }
+  };
 
   return (
     <div>
       <h2>Todo List</h2>
+
+      {/* 🔥 empty state */}
+      {todos.length === 0 && <p>No todos available</p>}
+
       {todos.map((todo) => (
-        <div key={todo.id}>
-          {todo.title} - {todo.category} - {todo.due_date}
+        <div key={todo.id} style={{ marginBottom: "10px" }}>
+          <strong>{todo.title}</strong> | {todo.category} -{" "}
+          {formatDate(todo.due_date)}
+
+          <button
+            onClick={() => handleDelete(todo.id)}
+            style={{ marginLeft: "10px", color: "yellow" }}
+          >
+            Delete
+          </button>
         </div>
       ))}
     </div>
   );
-} 
+}
