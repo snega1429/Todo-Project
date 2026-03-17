@@ -12,7 +12,6 @@ type Todo = {
 export default function TodoList() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchTodos();
@@ -21,15 +20,9 @@ export default function TodoList() {
   const fetchTodos = async () => {
     try {
       const res = await API.get("/todos");
-      console.log("Fetched todos:", res.data); // ✅ Debug
-      if (res.data && res.data.length > 0) {
-        setTodos(res.data);
-      } else {
-        setTodos([]);
-      }
-    } catch (err: any) {
-      console.error("Error fetching todos:", err);
-      setError("Failed to load todos. Check API connection.");
+      setTodos(res.data);
+    } catch (error) {
+      console.error("Error fetching todos:", error);
       setTodos([]);
     } finally {
       setLoading(false);
@@ -37,7 +30,6 @@ export default function TodoList() {
   };
 
   if (loading) return <p>Loading Todos...</p>;
-  if (error) return <p>{error}</p>;
   if (!todos.length) return <p>No Todos Found</p>;
 
   return (
@@ -50,4 +42,4 @@ export default function TodoList() {
       ))}
     </div>
   );
-}
+} 
