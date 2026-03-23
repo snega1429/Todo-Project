@@ -7,9 +7,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy import create_engine
 from pydantic import BaseModel
+import os
 from typing import List, Optional
-
-app - FastAPI()
 
 
 DATABASE_URL = "sqlite:///./todo.db"  
@@ -60,6 +59,7 @@ class TodoResponse(BaseModel):
 
 app = FastAPI()
 
+origins = [os.getenv("FRONTEND_URL")]
 
 origins = ["http://localhost:5176"]
 app.add_middleware(
