@@ -18,7 +18,7 @@ export default function TodoList({ refresh }: { refresh: boolean }) {
   const fetchTodos = async () => {
     try {
       const res = await API.get("/todos");
-      console.log("Fetched Todos:", res.data); // 🔥 debug
+      console.log("Fetched Todos:", res.data); 
       setTodos(res.data);
     } catch (error) {
       console.log("Fetch failed");
@@ -34,7 +34,7 @@ export default function TodoList({ refresh }: { refresh: boolean }) {
     try {
       await API.delete(`/todos/${id}`);
       console.log("Deleted:", id);
-      fetchTodos(); // 🔥 refresh after delete
+      fetchTodos(); 
     } catch (error) {
       console.log("Delete failed");
     }
@@ -44,7 +44,7 @@ export default function TodoList({ refresh }: { refresh: boolean }) {
     <div>
       <h2>Todo List</h2>
 
-      {/* 🔥 empty state */}
+      {/* empty state */}
       {todos.length === 0 && <p>No todos available</p>}
 
       {todos.map((todo) => (
