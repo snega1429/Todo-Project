@@ -9,6 +9,8 @@ from sqlalchemy import create_engine
 from pydantic import BaseModel
 from typing import List, Optional
 
+app - FastAPI()
+
 
 DATABASE_URL = "sqlite:///./todo.db"  
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
