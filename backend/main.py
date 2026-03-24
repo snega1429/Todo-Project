@@ -61,10 +61,10 @@ app = FastAPI()
 
 origins = [os.getenv("FRONTEND_URL")]
 
-origins = ["http://localhost:5176"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://delicate-souffle-7050ee.netlify.app/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
