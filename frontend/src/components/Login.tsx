@@ -1,64 +1,109 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import API from "../api/api";
-import '../App.css';
 
-type LoginProps = {
-  onLoginSuccess: () => void;
+type Props = {
+  onSignupSuccess: () => void;
 };
 
-export default function Login({ onLoginSuccess} : LoginProps) {
+export default function Signup({ onSignupSuccess }: Props) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+
     e.preventDefault();
-  
 
     try {
 
-      const res = await API.post("/login", {email,password});
-      console.log("Server response:", {email, password });
+      const res = await API.post("/signup", {
+        email,
+        password
+      });
 
       console.log(res.data);
 
       setMessage(res.data.message);
-      onLoginSuccess();
 
-      if(res.data.message === "Login successful") {
-        console.log("Login success, going to Signup");
-        onLoginSuccess();
+      if (
+        res.data.message === "Signup successful"
+      ) {
+        console.log(
+          "Signup success → going to Todo page"
+        );
+
+        onSignupSuccess();
       }
 
     } catch (error: any) {
-      if (error.response && error.response.data) {
-        setMessage(error.response.data.detail || "Login failed");
-      } else { 
-        setMessage("Login successful");
+
+      if (error.response) {
+
+        setMessage(
+          error.response.data.detail
+          || "Signup failed"
+        );
+
+        if (
+          error.response.data.detail
+          === "User already exists"
+        ) {
+          onSignupSuccess();
+        }
+
+      } else {
+        setMessage("Server error");
+      }
+
     }
-  }
+
   };
-      
+
   return (
-    <div className="login-container">
-      <h2>Login</h2>
+    <div>
 
-      <form onSubmit={handleLogin}> className="login-form"
+      <h2>Signup</h2>
 
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <form onSubmit={handleSignup}>
+
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
+        />
+
         <br />
 
-        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) =>
+            setPassword(e.target.value)
+          }
+        />
+
         <br />
 
-        <button type="submit">Login</button>
+        <button type="submit">
+          Signup
+        </button>
 
       </form>
 
-      {message && <p className="login-message">{message}</p>}
+      {message && (
+        <p>
+          {message}
+        </p>
+      )}
 
     </div>
   );
-}
 
+}
